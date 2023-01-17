@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
@@ -19,19 +20,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.zip.Inflater
 
 const val BASE_URL = "https://api.forismatic.com/"
+val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        getCurrentData()
+        getCurrentData()
 
-        binding.layoutGenerateQuote.setOnClickListener{
-//            getCurrentData()
+        binding.layoutRefresh.setOnClickListener{
+            getCurrentData()
         }
     }
 
@@ -50,9 +53,10 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
 
             try {
-                val response: Response<QuoteJson> = api.getQuote().awaitResponse()
+                val response = api.getQuote().awaitResponse()
                 if (response.isSuccessful) {
-                    val data: QuoteJson = response.body()!!
+                    val data = response.body()!!
+                    Log.d(TAG, data.toString())
 
                     withContext(Dispatchers.Main) {
                         binding.tvQuote.visibility = View.VISIBLE
@@ -60,7 +64,12 @@ class MainActivity : AppCompatActivity() {
                         binding.progressBar.visibility = View.GONE
 
                         binding.tvQuote.text = data.quoteText
-                        binding.tvAuthor.text = data.quoteAuthor
+
+                        if (!data.quoteAuthor.isBlank()) {
+                            binding.tvAuthor.text = "- " + data.quoteAuthor
+                        } else {
+                            binding.tvAuthor.text = getString(R.string.blank_author)
+                        }
                     }
                 }
             } catch (e: Exception) {
