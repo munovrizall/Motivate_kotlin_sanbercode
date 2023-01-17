@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                         binding.tvQuote.text = data.quoteText
 
                         if (!data.quoteAuthor.isBlank()) {
-                            binding.tvAuthor.text = "- " + data.quoteAuthor
+                            binding.tvAuthor.text = "-" + data.quoteAuthor
                         } else {
                             binding.tvAuthor.text = getString(R.string.blank_author)
                         }

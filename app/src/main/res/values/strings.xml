@@ -3,4 +3,5 @@
     <string name="sample_quote">Sample Quote</string>
     <string name="sample_author">Sample Author</string>
     <string name="blank_author">- Anonymous</string>
+    <string name="landscape_picture">Landscape Picture</string>
 </resources>
