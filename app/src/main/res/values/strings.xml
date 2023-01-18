@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Motivate!</string>
-    <string name="sample_quote">Sample Quote</string>
-    <string name="sample_author">Sample Author</string>
-    <string name="blank_author">- Anonymous</string>
+    <string name="sample_quote">Click to generate quote!</string>
+    <string name="sample_author"> </string>
+    <string name="blank_author">-Anonymous</string>
     <string name="landscape_picture">Landscape Picture</string>
     <string name="add_to_do">add to do</string>
 </resources>

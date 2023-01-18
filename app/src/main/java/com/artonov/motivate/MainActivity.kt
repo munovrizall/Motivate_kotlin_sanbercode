@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.artonov.motivate.api.ApiRequests
 import com.artonov.motivate.api.QuoteJson
 import com.artonov.motivate.databinding.ActivityMainBinding
@@ -25,6 +27,7 @@ val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var viewModel: QuoteViewModel
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +35,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getCurrentData()
+        // View Model
+        viewModel = ViewModelProvider(this).get(QuoteViewModel::class.java)
+        viewModel.currentQuote.observe(this, Observer {
+            binding.tvQuote.text = it.toString()
+        })
 
-        binding.layoutRefresh.setOnClickListener{
-            getCurrentData()
-        }
+        viewModel.currentAuthor.observe(this, Observer {
+            binding.tvAuthor.text = it.toString()
+        })
+
+        getQuote()
 
         binding.fabAddTodo.setOnClickListener{
             val intent = Intent(this@MainActivity, AddActivity::class.java)
@@ -44,43 +53,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentData() {
+    private fun getQuote() {
+        binding.layoutRefresh.setOnClickListener {
+            binding.tvQuote.visibility = View.INVISIBLE
+            binding.tvAuthor.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
 
-        binding.tvQuote.visibility = View.INVISIBLE
-        binding.tvAuthor.visibility = View.INVISIBLE
-        binding.progressBar.visibility = View.VISIBLE
+            val api: ApiRequests = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ApiRequests::class.java)
 
-        val api: ApiRequests = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiRequests::class.java)
+            GlobalScope.launch(Dispatchers.IO) {
 
-        GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val response = api.getQuote().awaitResponse()
+                    if (response.isSuccessful) {
+                        val data = response.body()!!
+                        Log.d(TAG, data.toString())
 
-            try {
-                val response = api.getQuote().awaitResponse()
-                if (response.isSuccessful) {
-                    val data = response.body()!!
-                    Log.d(TAG, data.toString())
+                        withContext(Dispatchers.Main) {
+                            binding.tvQuote.visibility = View.VISIBLE
+                            binding.tvAuthor.visibility = View.VISIBLE
+                            binding.progressBar.visibility = View.GONE
 
-                    withContext(Dispatchers.Main) {
-                        binding.tvQuote.visibility = View.VISIBLE
-                        binding.tvAuthor.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
+                            viewModel.currentQuote.value = data.quoteText
 
-                        binding.tvQuote.text = data.quoteText
-
-                        if (!data.quoteAuthor.isBlank()) {
-                            binding.tvAuthor.text = "-" + data.quoteAuthor
-                        } else {
-                            binding.tvAuthor.text = getString(R.string.blank_author)
+                            if (!data.quoteAuthor.isBlank()) {
+                                viewModel.currentAuthor.value = "-" + data.quoteAuthor
+                            } else {
+                                viewModel.currentAuthor.value = getString(R.string.blank_author)
+                            }
                         }
                     }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(applicationContext, "Check your internet connection!", Toast.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Check your internet connection!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }
