@@ -8,9 +8,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.artonov.motivate.api.ApiRequests
 import com.artonov.motivate.api.QuoteJson
+import com.artonov.motivate.database.Todo
 import com.artonov.motivate.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,13 +32,15 @@ val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     lateinit var viewModel: QuoteViewModel
+    private val todoAdapter: TodoAdapter by lazy { TodoAdapter() }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setAdapter()
+        loadData()
         // View Model
         viewModel = ViewModelProvider(this).get(QuoteViewModel::class.java)
         viewModel.currentQuote.observe(this, Observer {
@@ -98,5 +104,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setAdapter() {
+        recyclerview.layoutManager = LinearLayoutManager(this)
+        recyclerview.adapter = todoAdapter
+    }
+
+    private fun loadData() {
+        val todoList = arrayListOf<Todo>()
+
+        for (i in 1..10){
+            todoList.add(Todo(1, "Title $i", "Description $i", "14 apr"))
+        }
+        todoAdapter.updateData(todoList)
     }
 }
