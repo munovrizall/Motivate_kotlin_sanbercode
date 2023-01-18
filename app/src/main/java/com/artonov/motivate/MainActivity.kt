@@ -1,5 +1,6 @@
 package com.artonov.motivate
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.layoutRefresh.setOnClickListener{
             getCurrentData()
+        }
+
+        binding.fabAddTodo.setOnClickListener{
+            val intent = Intent(this@MainActivity, AddActivity::class.java)
+            startActivity(intent)
         }
     }
 

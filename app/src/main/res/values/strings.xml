@@ -4,4 +4,5 @@
     <string name="sample_author">Sample Author</string>
     <string name="blank_author">- Anonymous</string>
     <string name="landscape_picture">Landscape Picture</string>
+    <string name="add_to_do">add to do</string>
 </resources>
