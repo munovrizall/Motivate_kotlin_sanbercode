@@ -5,4 +5,11 @@
     <string name="blank_author">-Anonymous</string>
     <string name="landscape_picture">Landscape Picture</string>
     <string name="add_to_do">add to do</string>
+    <string name="masukkan_judul_todo">Masukkan judul todo</string>
+    <string name="masukkan_deskripsi_todo">Masukkan deskripsi todo</string>
+    <string name="about">About</string>
+    <string name="about_desc">Aplikasi ini dibuat dan dikembangkan oleh:\n<b>Mohammad Novrizal Sugiarto</b>\nuntuk memenuhi tugas course kotlin Sanbercode</string>
+    <string name="github">github.com/munovrizall</string>
+    <string name="linkedin">linkedin.com/in/munovrizall/</string>
+    <string name="instagram">instagram.com/munovrizall</string>
 </resources>

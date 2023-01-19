@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
+    android:elevation="16dp"
     app:cardCornerRadius="16dp"
-    android:elevation="16dp">
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_bg"
-        android:padding="16dp">
+        android:background="@drawable/card_bg">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_datetime"
+            android:id="@+id/ic_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_delete" />
 
@@ -26,6 +29,9 @@
             android:id="@+id/tv_todo_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -39,6 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/tv_todo_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_todo_title"
@@ -49,6 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/poppins"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_todo_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_todo_desc"
             tools:text="18 Jan 2023, 14:00" />

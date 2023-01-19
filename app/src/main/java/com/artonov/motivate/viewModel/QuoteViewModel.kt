@@ -1,4 +1,4 @@
-package com.artonov.motivate
+package com.artonov.motivate.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
