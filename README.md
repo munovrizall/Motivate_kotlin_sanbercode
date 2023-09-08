@@ -1,6 +1,6 @@
 # Motivate!
 
-
+![Tugas Akhir terbaik](https://i.imgur.com/5A0I70X.png)
 Aplikasi todo yang dibuat untuk memenuhi tugas akhir kotlin Sanbercode.
 
 ## Lessons Learned
